@@ -42,8 +42,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function InviteesRoute() {
   const data = useLoaderData<LoaderData>();
-  const actionData = useActionData();
-  console.log(actionData);
 
   return (
     <div>
