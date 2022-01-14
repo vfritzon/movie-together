@@ -25,4 +25,17 @@ model Invitee {
   name         String
   movieNight   MovieNight @relation(fields: [movieNightId], references: [id])
   movieNightId String
+  movieSuggestions MovieSuggestion[]
+}
+
+model MovieSuggestion {
+  id               String   @id @default(uuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  tmdbId           Int
+  tmdbPosterPath   String
+  tmdbBackdropPath String
+  tmdbTitle        String
+  invitee          Invitee @relation(fields: [inviteeId], references: [id])
+  inviteeId        String
 }
