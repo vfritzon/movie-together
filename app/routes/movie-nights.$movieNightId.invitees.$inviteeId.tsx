@@ -40,7 +40,7 @@ export default function InviteeRoute() {
 
   return (
     <div>
-      <h1>You're invited!</h1>
+      <h1>{invitee.name}, You're invited!</h1>
       <Form method="post">
         <input type="hidden" name="movieNightId" value={invitee.movieNightId} />
         <input type="hidden" name="inviteeId" value={invitee.id} />

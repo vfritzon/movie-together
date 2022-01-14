@@ -2,9 +2,9 @@ import { Invitee } from "@prisma/client";
 import {
   ActionFunction,
   Form,
+  Link,
   LoaderFunction,
   redirect,
-  useActionData,
   useLoaderData,
 } from "remix";
 import { db } from "~/utils/db.server";
@@ -48,7 +48,14 @@ export default function InviteesRoute() {
       <h3>Invitees</h3>
       <ul>
         {data.invitees.map((invitee) => (
-          <li key={invitee.id}>{invitee.name}</li>
+          <li key={invitee.id}>
+            {invitee.name}{" "}
+            <Link
+              to={`/movie-nights/${invitee.movieNightId}/invitees/${invitee.id}`}
+            >
+              Invite link
+            </Link>
+          </li>
         ))}
       </ul>
       <h4>Invite more</h4>
