@@ -1,9 +1,7 @@
-import { LoaderFunction } from "remix";
-import { useLoaderData } from "remix";
+import { LoaderFunction, useLoaderData, Link, Outlet } from "remix";
 import type { Invitee, MovieNight } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { getInviteeId } from "~/utils/session.server";
-import { Link, Outlet } from "react-router-dom";
 
 type LoaderData = { movieNight: MovieNight; invitee: Invitee };
 
