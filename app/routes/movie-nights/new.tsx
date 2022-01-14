@@ -1,19 +1,28 @@
-import { ActionFunction, Form, redirect } from "remix";
+import { ActionFunction, Form } from "remix";
 import { db } from "~/utils/db.server";
+import { createUserSession } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const name = form.get("name");
+  const movieNightName = form.get("movieNightName");
 
-  if (typeof name !== "string") {
+  if (typeof movieNightName !== "string") {
     throw new Error(`Form not submitted correctly.`);
   }
 
-  const fields = { name };
+  const movieNightFields = { name: movieNightName };
 
-  const movieNight = await db.movieNight.create({ data: fields });
+  const movieNight = await db.movieNight.create({ data: movieNightFields });
 
-  return redirect(`/movie-nights/${movieNight.id}`);
+  const name = form.get("name");
+  if (typeof name !== "string") {
+    throw new Error(`Form not submitted correctly.`);
+  }
+  const inviteeFields = { name, movieNightId: movieNight.id };
+
+  const invitee = await db.invitee.create({ data: inviteeFields });
+
+  return createUserSession(invitee.id, `/movie-nights/${movieNight.id}`);
 };
 
 export default function NewMovieNight() {
@@ -22,7 +31,10 @@ export default function NewMovieNight() {
       <h1>Create a Movie Night</h1>
       <Form method="post" reloadDocument>
         <label>
-          Name: <input type="text" name="name" />
+          Movie Night Name: <input type="text" name="movieNightName" />
+        </label>
+        <label>
+          Your Name: <input type="text" name="name" />
         </label>
         <button type="submit">Create</button>
       </Form>

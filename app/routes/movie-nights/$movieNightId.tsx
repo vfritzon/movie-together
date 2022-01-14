@@ -1,8 +1,9 @@
-import { LoaderFunction, Outlet } from "remix";
+import { LoaderFunction } from "remix";
 import { useLoaderData } from "remix";
 import type { Invitee, MovieNight } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { getInviteeId } from "~/utils/session.server";
+import { Link } from "react-router-dom";
 
 type LoaderData = { movieNight: MovieNight; invitee: Invitee };
 
@@ -28,7 +29,8 @@ export default function MovieNightRoute() {
   return (
     <div>
       <h1>{movieNight.name}</h1>
-      <Outlet />
+      <p>Your name: {invitee.name}</p>
+      <Link to={`/movie-nights/${movieNight.id}/invitees`}>Invitees</Link>
     </div>
   );
 }
