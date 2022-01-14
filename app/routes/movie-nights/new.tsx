@@ -20,7 +20,7 @@ export default function NewMovieNight() {
   return (
     <div>
       <h1>Create a Movie Night</h1>
-      <Form method="post">
+      <Form method="post" reloadDocument>
         <label>
           Name: <input type="text" name="name" />
         </label>

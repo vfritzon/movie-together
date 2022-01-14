@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "remix";
+import { LoaderFunction, Outlet } from "remix";
 import { useLoaderData } from "remix";
 import type { MovieNight } from "@prisma/client";
 import { db } from "~/utils/db.server";
@@ -19,5 +19,10 @@ export const loader: LoaderFunction = async ({ params }) => {
 export default function MovieNightRoute() {
   const data = useLoaderData<LoaderData>();
 
-  return <h1>{data.movieNight.name}</h1>;
+  return (
+    <div>
+      <h1>{data.movieNight.name}</h1>
+      <Outlet />
+    </div>
+  );
 }
