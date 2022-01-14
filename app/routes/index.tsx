@@ -1,21 +1,12 @@
-import { json, LoaderFunction, useLoaderData } from "remix";
-import type { MovieNight } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import { Link } from "remix";
 
-export let loader: LoaderFunction = async () => {
-  const data = await db.movieNight.findMany();
-
-  return json<Array<MovieNight>>(data);
-};
-
-export default function Users() {
-  const movieNights = useLoaderData<Array<MovieNight>>();
-
+export default function Index() {
   return (
-    <ul>
-      {movieNights.map((movieNight) => (
-        <li key={movieNight.id}>{movieNight.name}</li>
-      ))}
-    </ul>
+    <div>
+      <h1>Movie Together</h1>
+      <Link to="/movie-nights/create" prefetch="render">
+        Get started
+      </Link>
+    </div>
   );
 }
