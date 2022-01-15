@@ -106,7 +106,7 @@ export default function MovieNightIndexRoute() {
 
   return (
     <div className="bg-red-200">
-      <h2>Suggested Movies</h2>
+      <h2 className="text-xl text-bold">Suggested Movies</h2>
       <ul>
         {votes.map((vote) => (
           <li>
@@ -124,7 +124,7 @@ export default function MovieNightIndexRoute() {
           </li>
         ))}
       </ul>
-      <h2>Top Movies</h2>
+      <h2 className="text-xl text-bold">Top Movies</h2>
       <ul>
         {movies.map((m) => (
           <li key={m.id}>
