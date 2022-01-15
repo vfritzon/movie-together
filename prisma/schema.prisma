@@ -38,4 +38,6 @@ model MovieSuggestion {
   tmdbTitle        String
   invitee          Invitee @relation(fields: [inviteeId], references: [id])
   inviteeId        String
+
+  @@unique([tmdbId, inviteeId])
 }

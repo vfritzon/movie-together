@@ -23,17 +23,26 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const tmdbMovie = await getMovie(Number(tmdbMovieId));
 
-  const movieSuggestion = await db.movieSuggestion.create({
-    data: {
-      tmdbTitle: tmdbMovie.title,
-      tmdbId: Number(tmdbMovie.id),
-      tmdbPosterPath: tmdbMovie.poster_path,
-      tmdbBackdropPath: tmdbMovie.backdrop_path,
-      inviteeId: inviteeId,
-    },
-  });
+  const existingSuggestionForInviteeAndMovie =
+    await db.movieSuggestion.findFirst({
+      where: { inviteeId: inviteeId, tmdbId: tmdbMovie.id },
+    });
 
-  console.log({ movieSuggestion });
+  if (existingSuggestionForInviteeAndMovie === null) {
+    await db.movieSuggestion.create({
+      data: {
+        tmdbTitle: tmdbMovie.title,
+        tmdbId: Number(tmdbMovie.id),
+        tmdbPosterPath: tmdbMovie.poster_path,
+        tmdbBackdropPath: tmdbMovie.backdrop_path,
+        inviteeId: inviteeId,
+      },
+    });
+  } else {
+    await db.movieSuggestion.delete({
+      where: { id: existingSuggestionForInviteeAndMovie.id },
+    });
+  }
 
   return redirect(`/movie-nights/${params.movieNightId}`);
 };
