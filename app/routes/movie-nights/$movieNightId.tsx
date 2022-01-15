@@ -51,8 +51,8 @@ export default function MovieNightRoute() {
                     )
                   }
                 >
-                  <span>Movie</span>&nbsp;
-                  <span className="text-red-600">Night</span>
+                  <span>Movie</span>
+                  <span className="text-red-600">Together</span>
                 </NavLink>
                 <NavLink
                   to={`/movie-nights/${movieNight.id}/invitees`}

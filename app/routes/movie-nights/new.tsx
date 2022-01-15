@@ -34,7 +34,7 @@ export default function NewMovieNightRoute() {
         <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
-              <img className="h-18 w-auto" src={logo} alt="Workflow" />
+              <img className="h-96 w-auto" src={logo} alt="Workflow" />
               <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
                 Watch a Movie Together
               </h2>
@@ -48,7 +48,7 @@ export default function NewMovieNightRoute() {
                       htmlFor="movieNightName"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Title
+                      Event
                     </label>
                     <div className="mt-1">
                       <input
@@ -86,7 +86,7 @@ export default function NewMovieNightRoute() {
                       type="submit"
                       className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
-                      Let's Go!
+                      Create
                     </button>
                   </div>
                 </Form>
@@ -97,7 +97,7 @@ export default function NewMovieNightRoute() {
         <div className="hidden lg:block relative w-0 flex-1">
           <img
             className="absolute inset-0 h-full w-full object-cover"
-            src="https://images.unsplash.com/photo-1540224871915-bc8ffb782bdf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
+            src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
             alt=""
           />
         </div>
@@ -105,19 +105,3 @@ export default function NewMovieNightRoute() {
     </>
   );
 }
-//export default function NewMovieNight() {
-//  return (
-//    <div>
-//      <h1>Create a Movie Night</h1>
-//      <Form method="post" reloadDocument>
-//        <label>
-//          Movie Night Name: <input type="text" name="movieNightName" />
-//        </label>
-//        <label>
-//          Your Name: <input type="text" name="name" />
-//        </label>
-//        <button type="submit">Create</button>
-//      </Form>
-//    </div>
-//  );
-//}
