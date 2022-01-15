@@ -98,6 +98,8 @@ export let loader: LoaderFunction = async ({ params }) => {
     }
   });
 
+  console.log({ movies });
+
   return json<LoaderData>({ movies, votes });
 };
 
@@ -105,11 +107,11 @@ export default function MovieNightIndexRoute() {
   const { movies, votes } = useLoaderData<LoaderData>();
 
   return (
-    <div className="bg-red-200">
+    <div>
       <h2 className="text-xl text-bold">Suggested Movies</h2>
       <ul>
         {votes.map((vote) => (
-          <li>
+          <li key={vote.movie.tmdbId}>
             <Form method="post" reloadDocument>
               <label>
                 <input
@@ -125,18 +127,23 @@ export default function MovieNightIndexRoute() {
         ))}
       </ul>
       <h2 className="text-xl text-bold">Top Movies</h2>
-      <ul>
+      <div className="flex flex-wrap gap-4">
         {movies.map((m) => (
-          <li key={m.id}>
+          <div key={m.id} className="">
             <Form method="post" reloadDocument>
               <label>
                 <input type="hidden" name="tmdbMovieId" value={m.id} />
               </label>
-              <button type="submit">{m.title}</button>
+              <button type="submit">
+                <img
+                  className="w-48"
+                  src={`https://image.tmdb.org/t/p/w200/${m.poster_path}`}
+                />
+              </button>
             </Form>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

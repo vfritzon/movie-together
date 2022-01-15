@@ -684,6 +684,14 @@ select {
   width: auto;
 }
 
+.w-12 {
+  width: 3rem;
+}
+
+.w-48 {
+  width: 12rem;
+}
+
 .max-w-7xl {
   max-width: 80rem;
 }
@@ -692,12 +700,20 @@ select {
   flex-shrink: 0;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .items-center {
   align-items: center;
 }
 
 .justify-between {
   justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
