@@ -127,7 +127,7 @@ export default function MovieNightIndexRoute() {
       <h2>Top Movies</h2>
       <ul>
         {movies.map((m) => (
-          <li>
+          <li key={m.id}>
             <Form method="post" reloadDocument>
               <label>
                 <input type="hidden" name="tmdbMovieId" value={m.id} />
