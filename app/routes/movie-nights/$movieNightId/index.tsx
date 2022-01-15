@@ -1,4 +1,3 @@
-import { MovieSuggestion } from "@prisma/client";
 import {
   ActionFunction,
   Form,
@@ -111,7 +110,16 @@ export default function MovieNightIndexRoute() {
       <ul>
         {votes.map((vote) => (
           <li>
-            {vote.movie.title}. Voters:{" "}
+            <Form method="post" reloadDocument>
+              <label>
+                <input
+                  type="hidden"
+                  name="tmdbMovieId"
+                  value={vote.movie.tmdbId}
+                />
+              </label>
+              <button type="submit">{vote.movie.title}</button>
+            </Form>
             {vote.voters.map((voter) => voter.name).join(", ")}
           </li>
         ))}
@@ -122,10 +130,9 @@ export default function MovieNightIndexRoute() {
           <li>
             <Form method="post" reloadDocument>
               <label>
-                {m.title}
                 <input type="hidden" name="tmdbMovieId" value={m.id} />
               </label>
-              <button type="submit">Suggest</button>
+              <button type="submit">{m.title}</button>
             </Form>
           </li>
         ))}
