@@ -17,3 +17,11 @@ export async function getPopularMovies() {
 
   return res.json();
 }
+
+export async function getMovie(tmdbMovieId: number) {
+  let res = await fetch(
+    `https://api.themoviedb.org/3/movie/${tmdbMovieId}?api_key=${tmdbKey}&language=en-US`
+  );
+
+  return res.json();
+}
