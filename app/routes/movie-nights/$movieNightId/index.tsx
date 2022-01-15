@@ -1,3 +1,4 @@
+import { MovieSuggestion } from "@prisma/client";
 import {
   ActionFunction,
   Form,
@@ -47,27 +48,84 @@ export const action: ActionFunction = async ({ request, params }) => {
   return redirect(`/movie-nights/${params.movieNightId}`);
 };
 
-export let loader: LoaderFunction = async () => {
+type LoaderData = {
+  movies: Array<TMDBMovie>;
+  votes: Array<Vote>;
+};
+
+type Vote = {
+  movie: { tmdbId: number; title: string };
+  voters: { inviteeId: string; name: string }[];
+};
+
+export let loader: LoaderFunction = async ({ params }) => {
   const data = await getPopularMovies();
   const movies: TMDBMovie[] = data.results;
 
-  return json<Array<TMDBMovie>>(movies);
+  const inviteesForMovieNight = await db.invitee.findMany({
+    where: { movieNightId: params.movieNightId },
+  });
+  const suggestionsForMovieNight = await db.movieSuggestion.findMany({
+    where: { invitee: { id: { in: inviteesForMovieNight.map((i) => i.id) } } },
+  });
+
+  let votes: Array<Vote> = [];
+
+  suggestionsForMovieNight.forEach((s) => {
+    const existing = votes.find((v) => v.movie.tmdbId === s.tmdbId);
+
+    const invitee = inviteesForMovieNight.find(
+      (invitee) => invitee.id === s.inviteeId
+    );
+    if (!invitee) {
+      throw new Error("invitee not in invitees for night");
+    }
+
+    if (existing !== undefined) {
+      existing.voters.push({
+        inviteeId: invitee.id,
+        name: invitee.name,
+      });
+    } else {
+      votes.push({
+        voters: [
+          {
+            inviteeId: invitee.id,
+            name: invitee.name,
+          },
+        ],
+        movie: { tmdbId: s.tmdbId, title: s.tmdbTitle },
+      });
+    }
+  });
+
+  return json<LoaderData>({ movies, votes });
 };
 
 export default function MovieNightIndexRoute() {
-  const data = useLoaderData<Array<TMDBMovie>>();
+  const { movies, votes } = useLoaderData<LoaderData>();
 
   return (
     <div>
+      <h2>Suggested Movies</h2>
       <ul>
-        {data.map((m) => (
+        {votes.map((vote) => (
+          <li>
+            {vote.movie.title}. Voters:{" "}
+            {vote.voters.map((voter) => voter.name).join(", ")}
+          </li>
+        ))}
+      </ul>
+      <h2>Top Movies</h2>
+      <ul>
+        {movies.map((m) => (
           <li>
             <Form method="post" reloadDocument>
               <label>
                 {m.title}
                 <input type="hidden" name="tmdbMovieId" value={m.id} />
               </label>
-              <button type="submit">Vote</button>
+              <button type="submit">Suggest</button>
             </Form>
           </li>
         ))}
