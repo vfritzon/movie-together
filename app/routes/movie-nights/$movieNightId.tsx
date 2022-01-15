@@ -25,16 +25,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function MovieNightRoute() {
   const { movieNight, invitee } = useLoaderData<LoaderData>();
-  const navigation = [
-    {
-      name: "Movie Night",
-      to: `/movie-nights/${movieNight.id}/`,
-    },
-    {
-      name: "Participants",
-      to: `/movie-nights/${movieNight.id}/invitees`,
-    },
-  ];
 
   function classNames(...classes: any) {
     return classes.filter(Boolean).join(" ");
@@ -50,22 +40,33 @@ export default function MovieNightRoute() {
                 <img className="block h-12 w-auto" src={logo} />
               </div>
               <div className="-my-px ml-6 flex space-x-8">
-                {navigation.map((item) => (
-                  <NavLink
-                    key={item.name}
-                    to={item.to}
-                    className={({ isActive }) =>
-                      classNames(
-                        isActive
-                          ? "border-indigo-500 text-gray-900"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                        "inline-flex items-center px-1 pt-1 border-b-2 text-md font-medium"
-                      )
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                ))}
+                <NavLink
+                  to={`/movie-nights/${movieNight.id}/`}
+                  className={({ isActive }) =>
+                    classNames(
+                      isActive
+                        ? "border-red-500 text-gray-900"
+                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                      "inline-flex items-center px-1 pt-1 border-b-2 text-md font-medium"
+                    )
+                  }
+                >
+                  <span>Movie</span>&nbsp;
+                  <span className="text-red-600">Night</span>
+                </NavLink>
+                <NavLink
+                  to={`/movie-nights/${movieNight.id}/invitees`}
+                  className={({ isActive }) =>
+                    classNames(
+                      isActive
+                        ? "border-red-500 text-gray-900"
+                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                      "inline-flex items-center px-1 pt-1 border-b-2 text-md font-medium"
+                    )
+                  }
+                >
+                  Participants
+                </NavLink>
               </div>
             </div>
             <div className="inline-flex items-center px-1 pt-1 text-md font-medium">
@@ -75,10 +76,10 @@ export default function MovieNightRoute() {
         </div>
       </Disclosure>
 
-      <div className="py-10">
+      <div className="py-6">
         <header>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold leading-tight text-gray-900">
+            <h1 className="text-3xl font-bold leading-loose text-red-600">
               {movieNight.name}
             </h1>
           </div>

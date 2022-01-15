@@ -9,6 +9,7 @@ import {
 import { db } from "~/utils/db.server";
 import { getInviteeId } from "~/utils/session.server";
 import { getMovie, getPopularMovies, TMDBMovie } from "~/utils/tmdb.server";
+import { UserIcon } from "@heroicons/react/solid";
 
 export const action: ActionFunction = async ({ request, params }) => {
   const form = await request.formData();
@@ -53,7 +54,7 @@ type LoaderData = {
 };
 
 type Vote = {
-  movie: { tmdbId: number; title: string };
+  movie: { tmdbId: number; title: string; posterPath: string };
   voters: { inviteeId: string; name: string }[];
 };
 
@@ -93,12 +94,14 @@ export let loader: LoaderFunction = async ({ params }) => {
             name: invitee.name,
           },
         ],
-        movie: { tmdbId: s.tmdbId, title: s.tmdbTitle },
+        movie: {
+          tmdbId: s.tmdbId,
+          title: s.tmdbTitle,
+          posterPath: s.tmdbPosterPath,
+        },
       });
     }
   });
-
-  console.log({ movies });
 
   return json<LoaderData>({ movies, votes });
 };
@@ -108,10 +111,9 @@ export default function MovieNightIndexRoute() {
 
   return (
     <div>
-      <h2 className="text-xl text-bold">Suggested Movies</h2>
-      <ul>
+      <div className="flex flex-wrap gap-4">
         {votes.map((vote) => (
-          <li key={vote.movie.tmdbId}>
+          <div key={vote.movie.tmdbId}>
             <Form method="post" reloadDocument>
               <label>
                 <input
@@ -120,13 +122,26 @@ export default function MovieNightIndexRoute() {
                   value={vote.movie.tmdbId}
                 />
               </label>
-              <button type="submit">{vote.movie.title}</button>
+              <button type="submit">
+                <img
+                  className="w-48"
+                  src={`https://image.tmdb.org/t/p/w200/${vote.movie.posterPath}`}
+                />
+              </button>
             </Form>
-            {vote.voters.map((voter) => voter.name).join(", ")}
-          </li>
+            <div className="flex flex-row">
+              {vote.voters.map((voter) => (
+                <div className="w-5" title={voter.name}>
+                  <UserIcon />
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
-      </ul>
-      <h2 className="text-xl text-bold">Top Movies</h2>
+      </div>
+      <h2 className="text-2xl mt-6 leading-loose text-bold text-red-600">
+        Suggest a Movie
+      </h2>
       <div className="flex flex-wrap gap-4">
         {movies.map((m) => (
           <div key={m.id} className="">
