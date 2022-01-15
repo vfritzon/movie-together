@@ -10,6 +10,14 @@ export interface TMDBMovie {
   title: string;
 }
 
+export async function searchMoviesByTitle(title: string) {
+  let res = await fetch(
+    `https://api.themoviedb.org/3/search/movie?api_key=${tmdbKey}&language=en-US&page=1&include_adult=false&query=${title}`
+  );
+
+  return res.json();
+}
+
 export async function getPopularMovies() {
   let res = await fetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`

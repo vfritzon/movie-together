@@ -8,8 +8,14 @@ import {
 } from "remix";
 import { db } from "~/utils/db.server";
 import { getInviteeId } from "~/utils/session.server";
-import { getMovie, getPopularMovies, TMDBMovie } from "~/utils/tmdb.server";
-import { UserIcon } from "@heroicons/react/solid";
+import {
+  getMovie,
+  getPopularMovies,
+  searchMoviesByTitle,
+  TMDBMovie,
+} from "~/utils/tmdb.server";
+import { SearchIcon } from "@heroicons/react/solid";
+import logo from "~/images/logo.svg";
 
 export const action: ActionFunction = async ({ request, params }) => {
   const form = await request.formData();
@@ -58,8 +64,15 @@ type Vote = {
   voters: { inviteeId: string; name: string }[];
 };
 
-export let loader: LoaderFunction = async ({ params }) => {
-  const data = await getPopularMovies();
+export let loader: LoaderFunction = async ({ params, request }) => {
+  const url = new URL(request.url);
+  const search = new URLSearchParams(url.search);
+  const titleSearch = search.get("title");
+
+  const data =
+    titleSearch === null || titleSearch.trim() === ""
+      ? await getPopularMovies()
+      : await searchMoviesByTitle(titleSearch);
   const movies: TMDBMovie[] = data.results;
 
   const inviteesForMovieNight = await db.invitee.findMany({
@@ -131,17 +144,39 @@ export default function MovieNightIndexRoute() {
             </Form>
             <div className="flex flex-row">
               {vote.voters.map((voter) => (
-                <div className="w-5" title={voter.name}>
-                  <UserIcon />
+                <div key={voter.inviteeId} className="w-5" title={voter.name}>
+                  <img src={logo} />
                 </div>
               ))}
             </div>
           </div>
         ))}
       </div>
-      <h2 className="text-2xl mt-6 leading-loose text-bold text-red-600">
-        Suggest a Movie
-      </h2>
+      <Form method="get" className="max-w-5xl ">
+        <label
+          htmlFor="title"
+          className="mt-3 block text-xl font-medium text-red-600"
+        >
+          Suggest a Movie
+        </label>
+        <div className="mt-1 flex shadow-sm mb-3">
+          <div className="relative flex items-stretch flex-grow focus-within:z-10">
+            <input
+              type="search"
+              name="title"
+              id="title"
+              className="focus:ring-gray-500 focus:border-gray-500 block w-full sm:text-sm border-gray-300"
+              placeholder="Enter a movie title to search"
+            />
+          </div>
+          <button
+            type="button"
+            className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          </button>
+        </div>
+      </Form>
       <div className="flex flex-wrap gap-4">
         {movies.map((m) => (
           <div key={m.id} className="">
