@@ -1,15 +1,21 @@
 import {
   Links,
+  LinksFunction,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
 import type { MetaFunction } from "remix";
 
 export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
+};
+
+import tailwindStyles from "./tailwind.css";
+export let links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: tailwindStyles }];
 };
 
 export default function App() {

@@ -105,7 +105,7 @@ export default function MovieNightIndexRoute() {
   const { movies, votes } = useLoaderData<LoaderData>();
 
   return (
-    <div>
+    <div className="bg-red-200">
       <h2>Suggested Movies</h2>
       <ul>
         {votes.map((vote) => (
